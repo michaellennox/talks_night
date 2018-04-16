@@ -1,6 +1,10 @@
 Rails:
   Enabled: true
 
+AllCops:
+  Exclude:
+    - 'db/schema.rb'
+
 Metrics/LineLength:
   Max: 120
 
