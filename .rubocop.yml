@@ -5,6 +5,10 @@ AllCops:
   Exclude:
     - 'db/schema.rb'
 
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*_spec.rb'
+
 Metrics/LineLength:
   Max: 120
 
