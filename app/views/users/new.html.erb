@@ -1,0 +1,49 @@
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-half">
+        <h1 class="title">Create Your Account</h1>
+
+        <%= form_with model: @user, local: true do |f| %>
+          <div class="field">
+            <%= f.label :display_name, class: "label" %>
+            <div class="control">
+              <%= f.text_field :display_name, class: "input", required: true %>
+            </div>
+            <%= field_errors_for @user, :display_name %>
+          </div>
+
+          <div class="field">
+            <%= f.label :email, class: "label" %>
+            <div class="control">
+              <%= f.email_field :email, class: "input", required: true %>
+            </div>
+            <%= field_errors_for @user, :email %>
+          </div>
+
+          <div class="field">
+            <%= f.label :password, class: "label" %>
+            <div class="control">
+              <%= f.password_field :password, class: "input", required: true %>
+            </div>
+            <%= field_errors_for @user, :password %>
+          </div>
+
+          <div class="field">
+            <%= f.label :password_confirmation, class: "label" %>
+            <div class="control">
+              <%= f.password_field :password_confirmation, class: "input", required: true %>
+            </div>
+            <%= field_errors_for @user, :password_confirmation %>
+          </div>
+
+          <div class="field">
+            <div class="control">
+              <%= f.submit "Create Account", class: "button is-primary" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>
