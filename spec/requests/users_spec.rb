@@ -33,10 +33,21 @@ RSpec.describe 'Users resource', type: :request do
         expect(User.last).to have_attributes user_attributes.except(:password, :password_confirmation)
       end
 
-      it 'redirects to the homepage' do
-        post_users
+      context 'when not directed from a particular flow' do
+        it 'redirects to the homepage' do
+          post_users
 
-        expect(response).to redirect_to home_path
+          expect(response).to redirect_to home_path
+        end
+      end
+
+      context 'when directed from the group creation flow' do
+        it 'redirects back to the new group page' do
+          get new_group_path
+          post_users
+
+          expect(response).to redirect_to new_group_path
+        end
       end
     end
 

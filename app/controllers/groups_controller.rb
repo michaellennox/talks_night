@@ -22,7 +22,10 @@ class GroupsController < ApplicationController
   private
 
   def require_login
-    redirect_to new_user_path unless current_user
+    return if current_user
+
+    session[:return_path] = new_group_path
+    redirect_to new_user_path
   end
 
   def group_params

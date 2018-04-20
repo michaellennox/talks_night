@@ -10,7 +10,7 @@ class UsersController < ApplicationController
 
     if @user.save
       session[:user_id] = @user.id
-      redirect_to home_path
+      redirect_to session.delete(:return_path) || home_path
     else
       render :new, status: :unprocessable_entity
     end

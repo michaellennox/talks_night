@@ -23,10 +23,11 @@ RSpec.describe 'Groups resource', type: :request do
     end
 
     context 'when not signed in' do
-      it 'redirects to the sign up flow' do
+      it 'redirects to the sign up flow and sets return as the new group flow' do
         get_new_group
 
         expect(response).to redirect_to new_user_path
+        expect(session[:return_path]).to eq new_group_path
       end
     end
   end
@@ -65,10 +66,11 @@ RSpec.describe 'Groups resource', type: :request do
     end
 
     context 'when not signed in' do
-      it 'redirects to the sign up flow' do
+      it 'redirects to the sign up flow and sets the return as the new group flow' do
         post_groups
 
         expect(response).to redirect_to new_user_path
+        expect(session[:return_path]).to eq new_group_path
       end
     end
   end
