@@ -55,4 +55,12 @@ RSpec.describe Group, type: :model do
       expect(group.errors[:owner]).to include 'must exist'
     end
   end
+
+  describe '#to_param' do
+    it 'is the url_slug' do
+      group = FactoryBot.build_stubbed(:group, url_slug: 'foo-bar-test')
+
+      expect(group.to_param).to eq 'foo-bar-test'
+    end
+  end
 end

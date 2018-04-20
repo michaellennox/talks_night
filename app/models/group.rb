@@ -9,6 +9,10 @@ class Group < ApplicationRecord
 
   before_create :set_url_slug
 
+  def to_param
+    url_slug
+  end
+
   private
 
   def set_url_slug

@@ -4,4 +4,8 @@
   .input {
     @extend .is-danger;
   }
+
+  .textarea {
+    @extend .is-danger;
+  }
 }
