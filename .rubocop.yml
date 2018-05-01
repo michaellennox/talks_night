@@ -4,6 +4,7 @@ Rails:
 AllCops:
   Exclude:
     - 'db/schema.rb'
+    - 'vendor/**/*'
 
 Metrics/BlockLength:
   Exclude:
