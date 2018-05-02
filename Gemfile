@@ -13,8 +13,7 @@ gem 'turbolinks', '~> 5'
 gem 'uglifier', '>= 1.3.0'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
-# Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt', '~> 3.1.11'
 
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
@@ -23,6 +22,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem 'factory_bot_rails', '~> 4.8'
   gem 'rspec-rails', '~> 3.7'
 end
 
@@ -32,4 +32,8 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'web-console', '>= 3.3.0'
+end
+
+group :test do
+  gem 'capybara', '~> 3.0'
 end

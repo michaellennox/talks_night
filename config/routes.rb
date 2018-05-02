@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  get '/', to: 'home#show', as: 'home'
+  resources :groups, only: %i[new create show], param: :url_slug
+  resources :users, only: %i[new create]
 end

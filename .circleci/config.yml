@@ -1,0 +1,105 @@
+version: 2
+
+references:
+  container_config: &container_config
+    working_directory: ~/talks_night
+    docker:
+      - image: circleci/ruby:2.5-node
+      - image: circleci/postgres:10.3
+        environment:
+          POSTGRES_USER: circleci
+          POSTGRES_DB: talks_night_test
+
+  restore_repo: &restore_repo
+    restore_cache:
+      keys:
+        - talks_night-repo-{{ .Branch }}-{{ .Revision }}
+        - talks_night-repo-{{ .Branch }}
+        - talks_night-repo-
+
+  restore_bundle: &restore_bundle
+    restore_cache:
+      keys:
+        - talks_night-bundle-{{ checksum "Gemfile.lock" }}
+        - talks_night-bundle-
+
+  restore_node_modules: &restore_node_modules
+    restore_cache:
+      keys:
+        - talks_night-npm-{{ checksum "yarn.lock" }}
+        - talks_night-npm-
+
+  configure_bundle_path: &configure_bundle_path
+    run: bundle --path vendor/bundle
+
+jobs:
+  checkout_code:
+    <<: *container_config
+    steps:
+      - *restore_repo
+      - checkout
+      - save_cache:
+          key: talks_night-repo-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ~/talks_night
+
+  install_dependencies:
+    <<: *container_config
+    steps:
+      - *restore_repo
+      - *restore_bundle
+      - *restore_node_modules
+      - run:
+          name: Install bundle dependencies
+          command: bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --without production
+      - save_cache:
+          key: talks_night-bundle-{{ checksum "Gemfile.lock" }}
+          paths:
+            - ~/talks_night/vendor/bundle
+      - run:
+          name: Install npm dependencies
+          command: yarn install --frozen-lockfile --prod
+      - save_cache:
+          key: talks_night-npm-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/talks_night/node_modules
+
+  test:
+    <<: *container_config
+    steps:
+      - *restore_repo
+      - *restore_bundle
+      - *restore_node_modules
+      - *configure_bundle_path
+      - run:
+          name: Wait for DB
+          command: dockerize -wait tcp://127.0.0.1:5432 -timeout 120s
+      - run:
+          name: Run test suite
+          command: bundle exec rspec
+
+  lint:
+    <<: *container_config
+    steps:
+      - *restore_repo
+      - *restore_bundle
+      - *restore_node_modules
+      - *configure_bundle_path
+      - run:
+          name: Run rubocop
+          command: bundle exec rubocop
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - checkout_code
+      - install_dependencies:
+          requires:
+            - checkout_code
+      - test:
+          requires:
+            - install_dependencies
+      - lint:
+          requires:
+            - install_dependencies
