@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class GroupsController < ApplicationController
-  before_action :require_login, only: %i[new create]
+  before_action -> { require_login(return_path: new_group_path) }, only: %i[new create]
 
   def new
     @group = Group.new
@@ -20,13 +20,6 @@ class GroupsController < ApplicationController
   def show; end
 
   private
-
-  def require_login
-    return if current_user
-
-    session[:return_path] = new_group_path
-    redirect_to new_user_path
-  end
 
   def group_params
     params
