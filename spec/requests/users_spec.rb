@@ -27,10 +27,12 @@ RSpec.describe 'Users resource', type: :request do
     subject(:post_users) { post users_path, params: { user: user_attributes } }
 
     context 'with valid params' do
-      it 'creates the user' do
+      it 'creates the user and logs them in' do
         expect { post_users }.to change(User, :count).by(1)
 
-        expect(User.last).to have_attributes user_attributes.except(:password, :password_confirmation)
+        user = User.last
+        expect(user).to have_attributes user_attributes.except(:password, :password_confirmation)
+        expect(session[:user_id]).to eq user.id
       end
 
       context 'when not directed from a particular flow' do
@@ -54,9 +56,10 @@ RSpec.describe 'Users resource', type: :request do
     context 'with invalid params' do
       let(:user_attributes) { super().merge(password: 'cat', password_confirmation: 'cat') }
 
-      it 'does not create the user and displays the form with error messages' do
+      it 'does not create or log in the user and displays the form with error messages' do
         expect { post_users }.not_to change(User, :count)
 
+        expect(session[:user_id]).to be nil
         expect(response).to have_http_status :unprocessable_entity
         assert_select 'form[action=?][method=?]', users_path, 'post' do
           assert_select 'p.is-danger', 'Password is too short (minimum is 8 characters)'

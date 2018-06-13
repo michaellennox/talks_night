@@ -27,7 +27,7 @@ RSpec.describe 'Groups resource', type: :request do
         get_new_group
 
         expect(response).to redirect_to new_user_path
-        expect(session[:return_path]).to eq new_group_path
+        expect(session[:login_return_path]).to eq new_group_path
       end
     end
   end
@@ -70,7 +70,7 @@ RSpec.describe 'Groups resource', type: :request do
         post_groups
 
         expect(response).to redirect_to new_user_path
-        expect(session[:return_path]).to eq new_group_path
+        expect(session[:login_return_path]).to eq new_group_path
       end
     end
   end
