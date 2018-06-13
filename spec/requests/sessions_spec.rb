@@ -57,4 +57,16 @@ RSpec.describe 'Sessions resource', type: :request do
       include_examples 'login failure'
     end
   end
+
+  describe 'DELETE /logout' do
+    before { sign_up }
+    subject(:delete_logout) { delete session_path }
+
+    it 'destroys the user\'s session and redirects to the homepage' do
+      delete_logout
+
+      expect(session[:user_id]).to eq nil
+      expect(response).to redirect_to home_path
+    end
+  end
 end
