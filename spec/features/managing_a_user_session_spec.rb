@@ -7,17 +7,24 @@ RSpec.feature 'Managing a user session', type: :feature do
 
   scenario 'A user can log in and out of talks night' do
     visit home_path
-    click_on 'Login'
+
+    within 'nav' do
+      click_on 'Login'
+    end
 
     expect(page).to have_current_path new_session_path
 
-    fill_in 'Email', with: user.email
-    fill_in 'Password', with: user.password
-    click_on 'Login'
+    within 'form' do
+      fill_in 'Email', with: user.email
+      fill_in 'Password', with: user.password
+      click_on 'Login'
+    end
 
     expect(page).to have_current_path home_path
 
-    click_on 'Logout'
+    within 'nav' do
+      click_on 'Logout'
+    end
 
     expect(page).to have_current_path home_path
     expect(page).not_to have_content 'Logout'
