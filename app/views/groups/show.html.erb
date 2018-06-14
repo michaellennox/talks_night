@@ -1,1 +1,38 @@
-Group Group Group
+<section class="hero is-light">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title"><%= @group.name %></h1>
+    </div>
+  </div>
+</section>
+
+<div class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <section class="column is-three-quarters">
+        <div class="content">
+          <h2>Description</h2>
+          <p><%= @group.description %></p>
+        </div>
+      </section>
+      <aside class="column menu">
+        <p class="menu-label">
+
+        </p>
+        <ul class="menu-list">
+          <li><%= link_to "About", group_path(@group) %></li>
+        </ul>
+
+        <% if @group.administered_by?(current_user) %>
+          <p class="menu-label">
+            Manage Group
+          </p>
+
+          <ul class="menu-list">
+            <li><%= link_to "Edit Details", edit_group_path(@group) %></li>
+          </ul>
+        <% end %>
+      </aside>
+    </div>
+  </div>
+</div>

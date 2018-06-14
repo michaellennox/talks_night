@@ -75,5 +75,53 @@ RSpec.describe 'Groups resource', type: :request do
     end
   end
 
-  describe 'GET /groups/:url_slug'
+  describe 'GET /groups/:url_slug' do
+    subject(:get_group) { get group_path(group) }
+
+    context 'when the group exists' do
+      let(:group) { FactoryBot.create(:group) }
+
+      shared_examples 'non-admin group page visibility' do
+        it 'displays the group page with no management link' do
+          get_group
+
+          assert_select 'h1', group.name
+          assert_select 'p', group.description
+          assert_select 'a[href=?]', edit_group_path(group), count: 0
+        end
+      end
+
+      context 'when the user is not logged in' do
+        include_examples 'non-admin group page visibility'
+      end
+
+      context 'when the current user is not a group admin' do
+        before { sign_up }
+
+        include_examples 'non-admin group page visibility'
+      end
+
+      context 'when the current user is a group admin' do
+        before { sign_in(group.owner) }
+
+        it 'displays the group page with the management link' do
+          get_group
+
+          assert_select 'h1', group.name
+          assert_select 'p', group.description
+          assert_select 'a[href=?]', edit_group_path(group)
+        end
+      end
+    end
+
+    context 'when the group does not exist' do
+      let(:group) { Group.new(url_slug: 'no-group-here') }
+
+      it 'returns a not found', :realistic_error_responses do
+        get_group
+
+        expect(response).to have_http_status :not_found
+      end
+    end
+  end
 end

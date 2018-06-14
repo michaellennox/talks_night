@@ -13,6 +13,10 @@ class Group < ApplicationRecord
     url_slug
   end
 
+  def administered_by?(user)
+    owner == user
+  end
+
   private
 
   def set_url_slug

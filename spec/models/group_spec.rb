@@ -63,4 +63,18 @@ RSpec.describe Group, type: :model do
       expect(group.to_param).to eq 'foo-bar-test'
     end
   end
+
+  describe '#administered_by?' do
+    let(:group) { FactoryBot.build_stubbed(:group) }
+
+    it 'is true for the group owner' do
+      expect(group.administered_by?(group.owner)).to be true
+    end
+
+    it 'is false for any other user' do
+      other_user = FactoryBot.build_stubbed(:user)
+
+      expect(group.administered_by?(other_user)).to be false
+    end
+  end
 end

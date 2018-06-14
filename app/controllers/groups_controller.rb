@@ -17,7 +17,9 @@ class GroupsController < ApplicationController
     end
   end
 
-  def show; end
+  def show
+    @group = Group.find_by!(url_slug: params[:url_slug])
+  end
 
   private
 
