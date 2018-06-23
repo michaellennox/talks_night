@@ -22,5 +22,8 @@ RSpec.feature 'Creating a group', type: :feature do
     click_on 'Create Space'
 
     expect(page).to have_current_path group_path('example-group')
+
+    expect(page).to have_content('Example Group')
+    expect(page).to have_content('Many things about this group...')
   end
 end
