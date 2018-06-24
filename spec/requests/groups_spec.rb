@@ -177,4 +177,75 @@ RSpec.describe 'Groups resource', type: :request do
       end
     end
   end
+
+  describe 'PATCH /groups/:url_slug' do
+    let(:new_atttributes) do
+      {
+        name: 'foo-bar-new-group',
+        description: 'Making newer group updates since forever'
+      }
+    end
+
+    subject(:patch_group) { patch group_path(group), params: { group: new_atttributes } }
+
+    context 'when a group exists' do
+      let(:group) { FactoryBot.create(:group) }
+
+      context 'when the user signed in is a group administrator' do
+        before { sign_in(group.owner) }
+
+        context 'when the parameters passed are valid' do
+          it 'updates the group and redirects to the group page' do
+            patch_group
+
+            expect(group.reload).to have_attributes(new_atttributes)
+            expect(response).to redirect_to(group_path(group))
+          end
+        end
+
+        context 'when the parameters passed are invalid' do
+          let(:new_atttributes) { super().merge(name: '') }
+
+          it 'renders the edit form with errors' do
+            patch_group
+
+            expect(response).to have_http_status :unprocessable_entity
+            assert_select 'form[action=?][method=?]', group_path(group), 'post' do
+              assert_select 'p.is-danger', "Name can't be blank"
+            end
+          end
+        end
+      end
+
+      context 'when the user signed in is not a group administrator' do
+        before { sign_up }
+
+        it 'returns that the access is forbidden and does not change the group', :realistic_error_responses do
+          patch_group
+
+          expect(group.reload).not_to have_attributes(new_atttributes)
+          expect(response).to have_http_status :forbidden
+        end
+      end
+
+      context 'when there is no user signed in' do
+        it 'returns that the access is unauthorized', :realistic_error_responses do
+          patch_group
+
+          expect(group.reload).not_to have_attributes(new_atttributes)
+          expect(response).to have_http_status :unauthorized
+        end
+      end
+    end
+
+    context 'when a group does not exist' do
+      let(:group) { Group.new(url_slug: 'no-group-here') }
+
+      it 'returns a not found', :realistic_error_responses do
+        patch_group
+
+        expect(response).to have_http_status :not_found
+      end
+    end
+  end
 end
