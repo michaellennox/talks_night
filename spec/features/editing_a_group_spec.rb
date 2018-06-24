@@ -15,7 +15,7 @@ RSpec.feature 'Editing a group', type: :feature do
 
     fill_in 'Name', with: 'I Changed This Group'
     fill_in 'Description', with: 'Some other things get changed about the group'
-    click_on 'Save'
+    click_on 'Update Group'
 
     expect(page).to have_current_path group_path(group)
 

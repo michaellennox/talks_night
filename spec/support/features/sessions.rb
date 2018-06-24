@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Features
   module Sessions
     def sign_in(user)

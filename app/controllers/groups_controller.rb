@@ -21,6 +21,12 @@ class GroupsController < ApplicationController
     @group = Group.find_by!(url_slug: params[:url_slug])
   end
 
+  def edit
+    @group = Group.find_by!(url_slug: params[:url_slug])
+
+    raise AccessDeniedError unless @group.administered_by?(current_user)
+  end
+
   private
 
   def group_params

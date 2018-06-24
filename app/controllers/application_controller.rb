@@ -2,6 +2,7 @@
 
 class ApplicationController < ActionController::Base
   include SessionManagement
+  include AccessDeniedHandler
 
   helper FormFieldErrorsHelper
 end

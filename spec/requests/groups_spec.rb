@@ -124,4 +124,57 @@ RSpec.describe 'Groups resource', type: :request do
       end
     end
   end
+
+  describe 'GET /groups/:url_slug/edit' do
+    subject(:get_edit_group) { get edit_group_path(group) }
+
+    context 'when the group exists' do
+      let!(:group) { FactoryBot.create(:group) }
+
+      context 'and the user signed in is the group owner' do
+        before { sign_in(group.owner) }
+
+        it 'renders the group editing form' do
+          get_edit_group
+
+          expect(response).to have_http_status :ok
+
+          assert_select 'form[action=?][method=?]', group_path(group), 'post' do
+            assert_select 'input[type=?][name=?][value=?]', 'hidden', '_method', 'patch'
+            assert_select 'input[name=?][value=?]', 'group[name]', group.name
+            assert_select 'textarea[name=?]', 'group[description]', group.description
+            assert_select 'input[type=?]', 'submit'
+          end
+        end
+      end
+
+      context 'and the user signed in is not the group owner' do
+        before { sign_up }
+
+        it 'returns that the access is forbidden', :realistic_error_responses do
+          get_edit_group
+
+          expect(response).to have_http_status :forbidden
+        end
+      end
+
+      context 'and there is no user signed in' do
+        it 'returns that the access is unauthorized', :realistic_error_responses do
+          get_edit_group
+
+          expect(response).to have_http_status :unauthorized
+        end
+      end
+    end
+
+    context 'when the group does not exist' do
+      let(:group) { Group.new(url_slug: 'no-group-here') }
+
+      it 'returns a not found', :realistic_error_responses do
+        get_edit_group
+
+        expect(response).to have_http_status :not_found
+      end
+    end
+  end
 end
