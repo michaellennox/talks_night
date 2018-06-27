@@ -16,5 +16,5 @@ RSpec.feature 'Registering to give a talk', type: :feature do
     expect(page).to have_current_path group_path(group)
 
     # assert page shows speaker tools
-      end
+  end
 end

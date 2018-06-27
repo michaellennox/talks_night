@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= "Talks Night | #{@group.name}" %></title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <%= render 'layouts/navbar' %>
+    <%= render 'layouts/group/hero' %>
+
+    <div class="section">
+      <div class="container">
+        <div class="columns is-centered">
+          <section class="column" id="group-content">
+            <%= yield %>
+          </section>
+
+          <%= render 'layouts/group/sidebar' %>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
