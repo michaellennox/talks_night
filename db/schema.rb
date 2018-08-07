@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_08_132003) do
+ActiveRecord::Schema.define(version: 2018_08_08_140612) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -26,6 +26,16 @@ ActiveRecord::Schema.define(version: 2018_08_08_132003) do
     t.index ["name"], name: "index_groups_on_name", unique: true
     t.index ["owner_id"], name: "index_groups_on_owner_id"
     t.index ["url_slug"], name: "index_groups_on_url_slug", unique: true
+  end
+
+  create_table "talk_suggestions", force: :cascade do |t|
+    t.bigint "talk_id", null: false
+    t.bigint "group_id", null: false
+    t.text "speaker_contact", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_talk_suggestions_on_group_id"
+    t.index ["talk_id"], name: "index_talk_suggestions_on_talk_id"
   end
 
   create_table "talks", force: :cascade do |t|
@@ -48,5 +58,7 @@ ActiveRecord::Schema.define(version: 2018_08_08_132003) do
   end
 
   add_foreign_key "groups", "users", column: "owner_id", on_delete: :restrict
+  add_foreign_key "talk_suggestions", "groups", on_delete: :restrict
+  add_foreign_key "talk_suggestions", "talks", on_delete: :restrict
   add_foreign_key "talks", "users", column: "speaker_id", on_delete: :restrict
 end
