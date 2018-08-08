@@ -19,9 +19,11 @@ RSpec.feature 'Registering to give a talk', type: :feature do
 
     expect(page).to have_current_path new_group_talk_path(group)
 
-    # fill in form displayed
+    fill_in "What's the title of your talk?", with: 'My awesome talk'
+    fill_in 'Tell us a bit more about it!', with: 'many things I can tell you about this talk'
+    click_on 'Continue'
 
-    expect(page).to have_current_path group_path(group)
+    expect(page).to have_current_path new_group_talk_suggestion_path(group, talk_id: Talk.last.id)
 
     # assert page shows speaker tools
   end
