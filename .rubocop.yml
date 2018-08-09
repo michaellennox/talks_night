@@ -16,6 +16,9 @@ Metrics/LineLength:
 Style/Documentation:
   Enabled: false
 
+Style/Lambda:
+  EnforcedStyle: literal
+
 Style/MixinUsage:
   Exclude:
     - 'bin/**/*'
