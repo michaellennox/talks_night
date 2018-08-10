@@ -1,0 +1,29 @@
+<div class="columns is-centered">
+  <div class="column is-three-quarters">
+    <h1 class="title">Give a talk at <%= @group.name %></h1>
+
+    <%= form_with model: [@group, @talk], local: true do |f| %>
+      <div class="field">
+        <%= f.label :title, "What's the title of your talk?", class: "label" %>
+        <div class="control">
+          <%= f.text_field :title, class: "input", required: true %>
+        </div>
+        <%= field_errors_for @talk, :title %>
+      </div>
+
+      <div class="field">
+        <%= f.label :description, "Tell us a bit more about it!", class: "label" %>
+        <div class="control">
+          <%= f.text_area :description, class: "textarea" %>
+        </div>
+        <%= field_errors_for @talk, :description %>
+      </div>
+
+      <div class="field">
+        <div class="control">
+          <%= f.submit "Continue", class: "button is-primary" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

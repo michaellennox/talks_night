@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class GroupsController < ApplicationController
+  layout 'group', except: %i[new create]
+
   before_action -> { require_login(return_path: new_group_path) }, only: %i[new create]
 
   def new

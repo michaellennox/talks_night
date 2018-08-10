@@ -1,0 +1,22 @@
+<div class="columns is-centered">
+  <div class="column is-three-quarters">
+    <h1 class="title">Give a talk at <%= @group.name %></h1>
+
+    <%= form_with model: [@group, @talk_suggestion], local: true do |f| %>
+      <%= f.hidden_field :talk_id, value: @talk.id, name: "talk_id" %>
+      <div class="field">
+        <%= f.label :speaker_contact, "We're looking forwards to speaking to you! How shall we get in touch?", class: "label" %>
+        <div class="control">
+          <%= f.text_area :speaker_contact, class: "input", required: true %>
+        </div>
+        <%= field_errors_for @talk_suggestion, :speaker_contact %>
+      </div>
+
+      <div class="field">
+        <div class="control">
+          <%= f.submit "Propose Talk", class: "button is-primary" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
