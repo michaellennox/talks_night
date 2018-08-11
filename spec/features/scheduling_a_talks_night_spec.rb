@@ -14,7 +14,7 @@ RSpec.feature 'Scheduling a talks night', type: :feature do
 
     click_on 'Schedule A Talks Night'
 
-    expect(page).to have_current_path new_group_talks_night_path(group)
+    expect(page).to have_current_path new_group_event_path(group)
 
     # fill in the new talks night form
 
