@@ -16,7 +16,12 @@ RSpec.feature 'Scheduling a talks night', type: :feature do
 
     expect(page).to have_current_path new_group_event_path(group)
 
-    # fill in the new talks night form
+    fill_in 'Event Title', with: 'Super Night!'
+    fill_in 'Description', with: 'Many things about this talk'
+    fill_in 'Starts At', with: '2018-12-31T21:59:60Z'
+    fill_in 'Ends At', with: '2018-12-31T23:59:60Z'
+
+    click_on 'Schedule Event'
 
     expect(page).to have_current_path group_path(group)
 
