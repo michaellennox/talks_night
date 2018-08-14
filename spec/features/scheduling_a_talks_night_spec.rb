@@ -6,8 +6,6 @@ RSpec.feature 'Scheduling a talks night', type: :feature do
   let!(:group) { FactoryBot.create(:group) }
 
   scenario 'A group administrator can schedule a talks night for their group' do
-    pending 'feature WIP'
-
     sign_in(group.owner)
 
     visit group_path(group)
@@ -25,6 +23,9 @@ RSpec.feature 'Scheduling a talks night', type: :feature do
 
     expect(page).to have_current_path group_path(group)
 
-    # assert that the page has a next talks night component with the night info
+    event = Event.last
+
+    expect(event.title).to eq 'Super Night!'
+    expect(event.group).to eq group
   end
 end
