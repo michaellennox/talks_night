@@ -56,6 +56,37 @@ RSpec.describe Group, type: :model do
     end
   end
 
+  describe '#events' do
+    it 'is all the events assigned to a specific group' do
+      group = FactoryBot.create(:group)
+      event_a = FactoryBot.create(:event, group_id: group.id)
+      event_b = FactoryBot.create(:event, group_id: group.id)
+      event_c = FactoryBot.create(:event)
+
+      expect(group.events).to include(event_a, event_b)
+      expect(group.events).not_to include(event_c)
+    end
+  end
+
+  describe '#next_event' do
+    it 'is the next scheduled event' do
+      group = FactoryBot.create(:group)
+      FactoryBot.create(:event, group_id: group.id, starts_at: 21.days.ago)
+      FactoryBot.create(:event, group_id: group.id, starts_at: 21.days.from_now)
+      FactoryBot.create(:event, starts_at: 2.days.from_now)
+
+      next_event = FactoryBot.create(:event, group_id: group.id, starts_at: 7.days.from_now)
+
+      expect(group.next_event).to eq next_event
+    end
+
+    it 'is nil when no scheduled event' do
+      group = FactoryBot.create(:group)
+
+      expect(group.next_event).to be nil
+    end
+  end
+
   describe '#to_param' do
     it 'is the url_slug' do
       group = FactoryBot.build_stubbed(:group, url_slug: 'foo-bar-test')
