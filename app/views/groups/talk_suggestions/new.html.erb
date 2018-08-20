@@ -7,7 +7,7 @@
       <div class="field">
         <%= f.label :speaker_contact, "We're looking forwards to speaking to you! How shall we get in touch?", class: "label" %>
         <div class="control">
-          <%= f.text_area :speaker_contact, class: "input", required: true %>
+          <%= f.text_area :speaker_contact, class: "textarea", required: true %>
         </div>
         <%= field_errors_for @talk_suggestion, :speaker_contact %>
       </div>

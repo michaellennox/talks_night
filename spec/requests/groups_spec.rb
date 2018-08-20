@@ -88,6 +88,7 @@ RSpec.describe 'Groups resource', type: :request do
           assert_select 'h1', group.name
           assert_select 'p', group.description
           assert_select 'a[href=?]', edit_group_path(group), count: 0
+          assert_select 'a[href=?]', new_group_event_path(group), count: 0
         end
       end
 
@@ -110,6 +111,7 @@ RSpec.describe 'Groups resource', type: :request do
           assert_select 'h1', group.name
           assert_select 'p', group.description
           assert_select 'a[href=?]', edit_group_path(group)
+          assert_select 'a[href=?]', new_group_event_path(group)
         end
       end
     end

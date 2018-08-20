@@ -10,11 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_08_140612) do
+ActiveRecord::Schema.define(version: 2018_08_10_075343) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "plpgsql"
+
+  create_table "events", force: :cascade do |t|
+    t.bigint "group_id", null: false
+    t.datetime "starts_at"
+    t.datetime "ends_at"
+    t.text "description"
+    t.string "title"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_events_on_group_id"
+  end
 
   create_table "groups", force: :cascade do |t|
     t.bigint "owner_id", null: false
@@ -57,6 +68,7 @@ ActiveRecord::Schema.define(version: 2018_08_08_140612) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "events", "groups", on_delete: :restrict
   add_foreign_key "groups", "users", column: "owner_id", on_delete: :restrict
   add_foreign_key "talk_suggestions", "groups", on_delete: :restrict
   add_foreign_key "talk_suggestions", "talks", on_delete: :restrict

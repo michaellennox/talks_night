@@ -1,0 +1,46 @@
+<div class="columns is-centered">
+  <div class="column is-three-quarters">
+    <h1 class="title">Schedule a Talks Night at <%= @group.name %></h1>
+
+    <%= form_with model: [@group, @event], local: true do |f| %>
+      <div class="field">
+        <%= f.label :title, "Event Title", class: "label" %>
+        <div class="control">
+          <%= f.text_field :title, class: "input", required: true %>
+        </div>
+        <%= field_errors_for @event, :title %>
+      </div>
+
+      <div class="field">
+        <%= f.label :description, "Description", class: "label" %>
+        <div class="control">
+          <%= f.text_area :description, class: "textarea", required: true %>
+        </div>
+        <%= field_errors_for @event, :description %>
+      </div>
+
+      <div class="field is-horizontal">
+        <%= f.label :starts_at, "Starts At", class: "field-label label" %>
+        <div class="field-body">
+          <%= f.datetime_local_field :starts_at, class: "input", required: true %>
+        </div>
+        <%= field_errors_for @event, :starts_at %>
+      </div>
+
+      <div class="field is-horizontal">
+        <%= f.label :ends_at, "Ends At", class: "field-label label" %>
+        <div class="field-body">
+          <%= f.datetime_local_field :ends_at, class: "input", required: true %>
+        </div>
+        <%= field_errors_for @event, :ends_at %>
+      </div>
+
+
+      <div class="field">
+        <div class="control">
+          <%= f.submit "Schedule Event", class: "button is-primary" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
