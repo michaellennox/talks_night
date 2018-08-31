@@ -81,6 +81,19 @@ RSpec.describe 'Groups resource', type: :request do
     context 'when the group exists' do
       let(:group) { FactoryBot.create(:group) }
 
+      context 'and there is a scheduled event' do
+        let!(:event) { FactoryBot.create(:event, starts_at: 5.days.from_now, group_id: group.id) }
+
+        it 'displays the details about that event' do
+          get_group
+
+          assert_select 'div.card' do
+            assert_select 'p', 'Next Event'
+            assert_select 'p.title', event.title
+          end
+        end
+      end
+
       shared_examples 'non-admin group page visibility' do
         it 'displays the group page with no management link' do
           get_group
@@ -191,7 +204,7 @@ RSpec.describe 'Groups resource', type: :request do
     subject(:patch_group) { patch group_path(group), params: { group: new_atttributes } }
 
     context 'when a group exists' do
-      let(:group) { FactoryBot.create(:group) }
+      let!(:group) { FactoryBot.create(:group) }
 
       context 'when the user signed in is a group administrator' do
         before { sign_in(group.owner) }

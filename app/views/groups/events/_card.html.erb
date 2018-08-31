@@ -1,0 +1,16 @@
+<div class="card">
+  <% if header_title %>
+    <header class="card-header">
+      <p class="card-header-title">
+        <%= header_title %>
+      </p>
+    </header>
+  <% end %>
+  <div class="card-content">
+    <p class="title"><%= event.title %></p>
+    <p><%= time_tag event.starts_at %></p>
+  </div>
+  <footer class="card-footer">
+    <%= link_to 'More Info', group_event_path(event.group, event), class: 'card-footer-item' %>
+  </footer>
+</div>

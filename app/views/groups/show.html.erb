@@ -1,4 +1,18 @@
-<div class="content">
-  <h2>Description</h2>
-  <p><%= @group.description %></p>
-</div>
+<% if @group.next_event %>
+  <section class="section">
+    <%= render(
+      partial: "groups/events/card",
+      locals: {
+        header_title: 'Next Event',
+        event: @group.next_event
+      }
+    ) %>
+  </section>
+<% end %>
+
+<section class="section">
+  <div class="content">
+    <h2 class="title">About Us</h2>
+    <p><%= @group.description %></p>
+  </div>
+</section>

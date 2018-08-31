@@ -6,6 +6,11 @@ module Groups
 
     before_action -> { set_group! }
 
+    def index
+      @upcoming_events = @group.upcoming_events
+      @previous_events = @group.previous_events
+    end
+
     def new
       raise AccessDeniedError unless @group.administered_by?(current_user)
 
@@ -22,6 +27,10 @@ module Groups
       else
         render :new, status: :unprocessable_entity
       end
+    end
+
+    def show
+      @event = @group.events.find(params[:id])
     end
 
     private

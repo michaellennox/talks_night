@@ -23,9 +23,7 @@ RSpec.feature 'Scheduling a talks night', type: :feature do
 
     expect(page).to have_current_path group_path(group)
 
-    event = Event.last
-
-    expect(event.title).to eq 'Super Night!'
-    expect(event.group).to eq group
+    expect(page).to have_content 'Super Night!'
+    expect(page).to have_content 'December 31, 2018 22:00'
   end
 end

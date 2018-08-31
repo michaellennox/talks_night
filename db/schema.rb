@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 2018_08_10_075343) do
     t.datetime "starts_at"
     t.datetime "ends_at"
     t.text "description"
-    t.string "title"
+    t.string "title", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["group_id"], name: "index_events_on_group_id"
