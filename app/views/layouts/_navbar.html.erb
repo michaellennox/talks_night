@@ -10,7 +10,9 @@
         <% if current_user %>
           <%= button_to 'Logout', session_path, method: :delete, form_class: "navbar-item", class: "button" %>
         <% else %>
-          <%= link_to 'Login', new_session_path, class: "navbar-item button" %>
+          <div class="navbar-item">
+            <%= link_to 'Login', new_session_path, class: "button" %>
+          </div>
         <% end %>
       </div>
     </div>
