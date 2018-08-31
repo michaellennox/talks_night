@@ -139,6 +139,8 @@ RSpec.describe 'Groups/Events resource' do
 
         get_events
 
+        expect(response).to have_http_status :ok
+
         assert_select '#upcoming-events' do
           assert_select 'h2', 'Upcoming Events'
           assert_select 'div.card' do
@@ -157,6 +159,8 @@ RSpec.describe 'Groups/Events resource' do
         last_event = FactoryBot.create(:event, starts_at: 2.days.ago, group: group)
 
         get_events
+
+        expect(response).to have_http_status :ok
 
         assert_select '#previous-events' do
           assert_select 'h2', 'Previous Events'
@@ -177,6 +181,58 @@ RSpec.describe 'Groups/Events resource' do
 
       it 'returns a not found', :realistic_error_responses do
         get_events
+
+        expect(response).to have_http_status :not_found
+      end
+    end
+  end
+
+  describe 'GET /groups/:url_slug/events/:event_id' do
+    subject(:get_event) { get group_event_path(group, event) }
+
+    context 'when a group does exist' do
+      let!(:group) { FactoryBot.create(:group) }
+
+      context 'and the event exists' do
+        let!(:event) { FactoryBot.create(:event, group: group) }
+
+        it 'shows details about that event' do
+          get_event
+
+          expect(response).to have_http_status :ok
+
+          assert_select '.title', event.title
+          assert_select 'p', event.description
+        end
+      end
+
+      context 'and the event does not exist' do
+        let(:event) { Event.new(id: 0) }
+
+        it 'returns a not found', :realistic_error_responses do
+          get_event
+
+          expect(response).to have_http_status :not_found
+        end
+      end
+
+      context 'and the event is present but for a different group' do
+        let!(:event) { FactoryBot.create(:event) }
+
+        it 'returns a not found', :realistic_error_responses do
+          get_event
+
+          expect(response).to have_http_status :not_found
+        end
+      end
+    end
+
+    context 'when a group does not exist' do
+      let(:group) { Group.new(url_slug: 'no-group-here') }
+      let(:event) { Event.new(id: 0) }
+
+      it 'returns a not found', :realistic_error_responses do
+        get_event
 
         expect(response).to have_http_status :not_found
       end

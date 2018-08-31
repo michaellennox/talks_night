@@ -10,4 +10,7 @@
     <p class="title"><%= event.title %></p>
     <p><%= time_tag event.starts_at %></p>
   </div>
+  <footer class="card-footer">
+    <%= link_to 'More Info', group_event_path(event.group, event), class: 'card-footer-item' %>
+  </footer>
 </div>

@@ -29,6 +29,10 @@ module Groups
       end
     end
 
+    def show
+      @event = @group.events.find(params[:id])
+    end
+
     private
 
     def set_group!
