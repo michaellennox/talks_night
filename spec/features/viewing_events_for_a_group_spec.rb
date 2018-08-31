@@ -19,12 +19,14 @@ RSpec.feature 'Viewing events for a group', type: :feature do
 
     expect(page).to have_current_path group_events_path(group)
 
-    # wrap with within some upcoming context
-    expect(page).to have_content(future_event1.title)
-    expect(page).to have_content(future_event2.title)
+    within '#upcoming-events' do
+      expect(page).to have_content(future_event1.title)
+      expect(page).to have_content(future_event2.title)
+    end
 
-    # wrap with within some historic context
-    expect(page).not_to have_content(past_event.title)
+    within '#previous-events' do
+      expect(page).to have_content(past_event.title)
+    end
 
     # interact with future_event1
 

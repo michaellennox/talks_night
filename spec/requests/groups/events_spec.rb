@@ -126,4 +126,60 @@ RSpec.describe 'Groups/Events resource' do
       end
     end
   end
+
+  describe 'GET /groups/:url_slug/events' do
+    subject(:get_events) { get group_events_path(group) }
+
+    context 'when a group exists' do
+      let!(:group) { FactoryBot.create(:group) }
+
+      it 'displays cards with scheduled talks with most recent first' do
+        future_event = FactoryBot.create(:event, starts_at: 5.days.from_now, group: group)
+        next_event = FactoryBot.create(:event, starts_at: 2.days.from_now, group: group)
+
+        get_events
+
+        assert_select '#upcoming-events' do
+          assert_select 'h2', 'Upcoming Events'
+          assert_select 'div.card' do
+            assert_select 'p.title', next_event.title
+          end
+          assert_select 'div.card' do
+            assert_select 'p.title', future_event.title
+          end
+        end
+
+        expect(next_event.title).to appear_before(future_event.title)
+      end
+
+      it 'displays cards with previous talks with most recent first' do
+        past_event = FactoryBot.create(:event, starts_at: 5.days.ago, group: group)
+        last_event = FactoryBot.create(:event, starts_at: 2.days.ago, group: group)
+
+        get_events
+
+        assert_select '#previous-events' do
+          assert_select 'h2', 'Previous Events'
+          assert_select 'div.card' do
+            assert_select 'p.title', last_event.title
+          end
+          assert_select 'div.card' do
+            assert_select 'p.title', past_event.title
+          end
+        end
+
+        expect(last_event.title).to appear_before(past_event.title)
+      end
+    end
+
+    context 'when a group does not exist' do
+      let(:group) { Group.new(url_slug: 'no-group-here') }
+
+      it 'returns a not found', :realistic_error_responses do
+        get_events
+
+        expect(response).to have_http_status :not_found
+      end
+    end
+  end
 end

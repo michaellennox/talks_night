@@ -1,16 +1,12 @@
 <% if @group.next_event %>
   <section class="section">
-    <div class="card">
-      <header class="card-header">
-        <p class="card-header-title">
-          Next Event
-        </p>
-      </header>
-      <div class="card-content">
-        <p class="title"><%= @group.next_event.title %></p>
-        <p><%= time_tag @group.next_event.starts_at %></p>
-      </div>
-    </div>
+    <%= render(
+      partial: "groups/events/card",
+      locals: {
+        header_title: 'Next Event',
+        event: @group.next_event
+      }
+    ) %>
   </section>
 <% end %>
 

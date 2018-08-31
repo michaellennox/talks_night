@@ -6,6 +6,11 @@ module Groups
 
     before_action -> { set_group! }
 
+    def index
+      @upcoming_events = @group.upcoming_events
+      @previous_events = @group.previous_events
+    end
+
     def new
       raise AccessDeniedError unless @group.administered_by?(current_user)
 

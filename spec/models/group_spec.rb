@@ -87,6 +87,34 @@ RSpec.describe Group, type: :model do
     end
   end
 
+  describe '#upcoming_events' do
+    it 'is all upcoming events for the group ordered by starts at' do
+      group = FactoryBot.create(:group)
+
+      FactoryBot.create(:event, group_id: group.id, starts_at: 21.days.ago)
+      FactoryBot.create(:event, starts_at: 2.days.from_now)
+
+      future_event = FactoryBot.create(:event, group_id: group.id, starts_at: 21.days.from_now)
+      next_event = FactoryBot.create(:event, group_id: group.id, starts_at: 7.days.from_now)
+
+      expect(group.upcoming_events).to eq [next_event, future_event]
+    end
+  end
+
+  describe '#previous_events' do
+    it 'is all previous events for the group ordered by most recent first' do
+      group = FactoryBot.create(:group)
+
+      FactoryBot.create(:event, group_id: group.id, starts_at: 21.days.from_now)
+      FactoryBot.create(:event, starts_at: 2.days.ago)
+
+      old_event = FactoryBot.create(:event, group_id: group.id, starts_at: 21.days.ago)
+      next_event = FactoryBot.create(:event, group_id: group.id, starts_at: 7.days.ago)
+
+      expect(group.previous_events).to eq [next_event, old_event]
+    end
+  end
+
   describe '#to_param' do
     it 'is the url_slug' do
       group = FactoryBot.build_stubbed(:group, url_slug: 'foo-bar-test')

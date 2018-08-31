@@ -1,0 +1,33 @@
+<section class="section" id="upcoming-events">
+  <div class="content">
+    <h2 class="title">Upcoming Events</h2>
+    <% @upcoming_events.each do |event| %>
+      <div class="content">
+        <%= render(
+          partial: "card",
+          locals: {
+            header_title: nil,
+            event: event
+          }
+        ) %>
+      </div>
+    <% end %>
+  </div>
+</section>
+
+<section class="section" id="previous-events">
+  <div class="content">
+    <h2 class="title">Previous Events</h2>
+    <% @previous_events.each do |event| %>
+      <div class="content">
+        <%= render(
+          partial: "card",
+          locals: {
+            header_title: nil,
+            event: event
+          }
+        ) %>
+      </div>
+    <% end %>
+  </div>
+</section>
