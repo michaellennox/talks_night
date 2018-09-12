@@ -12,5 +12,8 @@
   </div>
   <footer class="card-footer">
     <%= link_to 'More Info', group_event_path(event.group, event), class: 'card-footer-item' %>
+    <% if @group.administered_by?(current_user) %>
+      <%= link_to 'Manage Speakers', manage_talks_group_event_path(event.group, event), class: 'card-footer-item' %>
+    <% end %>
   </footer>
 </div>

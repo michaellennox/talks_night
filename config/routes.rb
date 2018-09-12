@@ -5,7 +5,12 @@ Rails.application.routes.draw do
   resources :groups, only: %i[new create show edit update], param: :url_slug do
     resources :talks, only: %i[new create], module: 'groups'
     resources :talk_suggestions, only: %i[new create], module: 'groups'
-    resources :events, only: %i[index new create show], module: 'groups'
+    resources :events, only: %i[index new create show], module: 'groups' do
+      member do
+        get 'manage_talks'
+        post 'talks'
+      end
+    end
   end
   resources :users, only: %i[new create]
 
