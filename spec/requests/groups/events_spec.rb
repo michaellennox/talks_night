@@ -238,4 +238,38 @@ RSpec.describe 'Groups/Events resource' do
       end
     end
   end
+
+  describe '/groups/:url_slug/events/:event_id/manage_talks' do
+    subject(:get_manage_talks) { get manage_talks_group_event_path(group, event) }
+
+    let!(:group) { FactoryBot.create(:group) }
+    let!(:event) { FactoryBot.create(:event, group: group) }
+
+    let!(:suggestion) { FactoryBot.create(:talk_suggestion, group: group) }
+
+    context 'and the user signed in is a group administrator' do
+      before { sign_in(group.owner) }
+
+      it 'displays information about prospective and confirmed speakers' do
+        get_manage_talks
+
+        expect(response).to have_http_status :ok
+        assert_select 'p.title', suggestion.talk.title
+        assert_select 'form[action=?][method=?]', schedule_talk_group_event_path(group, event), 'post' do
+          assert_select 'input[type=?][name=?][value=?]', 'hidden', 'suggestion_id', suggestion.id.to_s
+          assert_select 'input[type=?][value=?]', 'submit', 'Schedule'
+        end
+      end
+    end
+
+    context 'and the user signed in is not the group owner' do
+      before { sign_up }
+
+      it 'returns that the access is forbidden', :realistic_error_responses do
+        get_manage_talks
+
+        expect(response).to have_http_status :forbidden
+      end
+    end
+  end
 end

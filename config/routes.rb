@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     resources :events, only: %i[index new create show], module: 'groups' do
       member do
         get 'manage_talks'
-        post 'talks'
+        post 'schedule_talk'
       end
     end
   end

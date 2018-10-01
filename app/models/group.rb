@@ -4,6 +4,7 @@ class Group < ApplicationRecord
   belongs_to :owner, class_name: 'User', inverse_of: false
 
   has_many :events, dependent: :restrict_with_exception
+  has_many :talk_suggestions
 
   has_one :next_event, -> { scheduled.by_start_asc.limit(1) }, class_name: 'Event', inverse_of: :group
   has_many :upcoming_events, -> { scheduled.by_start_asc }, class_name: 'Event', inverse_of: :group

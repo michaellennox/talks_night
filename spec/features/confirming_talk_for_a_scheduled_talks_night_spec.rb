@@ -14,11 +14,15 @@ RSpec.feature 'Confirming talk for a scheduled talks night', type: :feature do
 
     visit group_path(group)
 
-    click_on 'Manage Speakers'
+    click_on 'Manage Talks'
+
+    expect(page).to have_content talk_suggestion.talk.title
+
+    click_on 'Schedule'
 
     # assert the page has details about how to contact the speaker
     # click to confirm the talk
-    # assert still on the manage speakers page
+    # assert still on the manage talks page
     # assert page no longer has talk as a proposal but as a confirmed
 
     expect(true).to be false

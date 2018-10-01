@@ -1,0 +1,36 @@
+<section class="section">
+  <div class="content">
+    <h2 class="title"><%= @event.title %></h2>
+    <p class="subtitle is-6"><%= time_tag @event.starts_at %></p>
+  </div>
+</section>
+
+<section class="section" id="suggested-talks">
+  <div class="content">
+    <h2 class="title">Proposed Talks</h2>
+    <% @group.talk_suggestions.each do |talk_suggestion| %>
+      <div class="content">
+        <div class="card">
+          <div class="card-content">
+            <div class="columns">
+              <div class="column is-one-third">
+                <p class="title is-4"><%= talk_suggestion.talk.title %></p>
+                <p class="subtitle is-6"><%= talk_suggestion.talk.speaker.display_name %></p>
+                <p>Contact: <%= talk_suggestion.speaker_contact %></p>
+              </div>
+              <div class="column">
+                <p><%= talk_suggestion.talk.description %></p>
+              </div>
+            </div>
+          </div>
+          <footer class="card-footer">
+            <%= button_to 'Schedule', schedule_talk_group_event_path(@group, @event),
+                  form_class: "card-footer-item", class: "button is-primary",
+                  params: { suggestion_id: talk_suggestion.id }
+            %>
+          </footer>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</section>

@@ -33,6 +33,12 @@ module Groups
       @event = @group.events.find(params[:id])
     end
 
+    def manage_talks
+      raise AccessDeniedError unless @group.administered_by?(current_user)
+
+      @event = @group.events.find(params[:id])
+    end
+
     private
 
     def set_group!
